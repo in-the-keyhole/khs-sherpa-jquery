@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>JQuery Sherpa Demo</title>
+
+<script type="text/javascript" src="javascript/json_utils.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script type="text/javascript" src="javascript/sherpa.js"></script>
+<script type="text/javascript">
+
+function output(data) {
+	$('#output').val(FormatJSON(data, ''));
+}
+
+//Default Defaults
+$.sherpa.defaults.url = 'sherpa';
+
+$(function() {
+	$('#quote').bind('click', function() {
+		var endpoint = $("#service").val();
+		var method = $("#method").val();
+		var ticker = $("#ticker").val();
+		
+		$.sherpa.call({endpoint:endpoint, method:method, params: {ticker: ticker}}, output);
+	});
+	
+});
+
+</script>
+</head>
+<body>
+<h2>Sherpa Examples</h2>
+
+<div>
+
+   <!--  JSON Results  -->
+	<div style="float: right">
+		JSON Results <br />
+		<textarea id="output" cols="80" rows="20"></textarea>
+	</div>
+
+   <!-- ENDPOINT Examples -->
+
+	<div style="float: left">
+		<table border="0">
+		
+			<!-- Stock QUOTE -->
+			<tr>
+				<b>Stock Quote</b>
+				<br />
+				<td>@Endpoint Service class <input id="service" type="input"
+					readonly="true" name="endpoint" size="50" value="StockService" />
+				</td>
+			</tr>
+			<tr>
+				<td>Method <input id="method" type="input" name="action"
+					readonly="true" size="50" value="quote" />
+				</td>
+			</tr>
+			<tr>
+				<td>Enter Ticker Symbol Parameter<input id="ticker" type="input"
+					name="ticker" size="50" value="GOOG" />
+				</td>
+			</tr>
+			<tr>
+				<td><input id="quote" type="submit" name="submit" /></td>
+			</tr>
+		</table>
+
+
+	</div>
+</div>
+
+
+</body>
+</html>
