@@ -1,0 +1,84 @@
+<!DOCTYPE html> 
+<html> 
+	<head> 
+	<title>My Page</title> 
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.css" />
+	<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+	<script type="text/javascript" src="javascript/0.0.1/sherpa.js"></script>
+	<script>
+		
+	
+    <!-- call Sherpa Endpoint 
+	$( document ).delegate("#main", "pageinit", function() {
+		$.sherpa.call({endpoint:'StockService', method:'quotes'}, listStocks);
+	});
+
+		function listStocks(stocks) {	
+			for(var i=0, len=stocks.length; i < len; i++){	 	
+			 	$('ul').append($('<li/>', {    //here appendin `<li>`
+			 	    'data-role': "list-divider"
+			 	}).append($('<a/>', {    //here appending `<a>` into `<li>`
+			 	    'href': '#',
+			 	    'data-transition': 'slide',
+			 	    'text': stocks[i].ticker+' - '+stocks[i].name + '(price='+stocks[i].price+',pe='+stocks[i].pe+',date='+stocks[i].tradeDate+')'
+			 	})));
+
+			 	$('ul').listview('refresh');	
+			 	
+			}	
+			
+		 	// Refresh button clicked
+		 	$('#refresh').click(function() {
+		 		$('li').removeData();
+		 		$.sherpa.call({endpoint:'StockService', method:'quotes'}, listStocks);
+		 	});
+		 	
+		 	
+			
+			
+		}	
+		
+	 $.get('data.html',function(data){
+				$('#something').append(data).trigger('create');
+				},'html');
+  
+		
+	</script>
+
+	<script src="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.js"></script>
+	
+
+
+</head> 
+<body> 
+
+<div id="main" data-role="page">
+
+	<div data-role="header">
+		<h1>Sherpa Stock Quotes</h1>
+	</div><!-- /header -->
+
+	<div data-role="content">	
+		
+			<ul data-role="listview" data-inset="true" data-filter="true">
+			
+</ul>
+		
+				
+	</div><!-- /content -->
+				
+
+	<div data-role="footer" class="ui-bar">
+	<a href="index.html" data-role="button" data-icon="plus">Add</a>
+	<a href="index.html" data-role="button" data-icon="delete">Delete</a>
+	<a id="refresh" href="index.html" data-role="button" data-icon="refresh">Refresh</a>
+	</div>
+	
+</div> 
+	
+
+</div><!-- /page -->
+
+</body>
+</html>
