@@ -13,7 +13,7 @@ public class StockService {
 
 	private final String YAHOO_FINANCE_URL = "http://finance.yahoo.com/d/quotes.csv?";
 	private final String PARAMS = "snd1l1yrj1";
-	private final String TICKERS = "s=XOM+JNJ+MSFT+GOOG+GE+INTC+AAPL+ORCL+VMW+CSCO";
+	private final String TICKERS = "XOM+FB+JNJ+MSFT+GOOG+GE+INTC+AAPL+ORCL+VMW+CSCO";
 	private final static String NA = "N/A";
 
 	static class Stock {
@@ -25,11 +25,38 @@ public class StockService {
 		public float pe;
 	}
 
-	public Stock quote(@Param(name = "ticker") String ticker) {
+	
+	public List<Stock> quotes(){
+		return findQuotes(TICKERS);
+	}
+	
+	public List<Stock> refresh(String tickers){
+		return findQuotes(tickers);
+	}
 
+	
+	public Stock quote(String ticker) {
+		
+		List<Stock> stocks = findQuotes(ticker);
+		Stock result = null;
+		if (stocks.isEmpty()) {
+			result = new Stock();
+			result.name = "Ticker "+ticker+" note found";
+		} else {
+			result = stocks.get(0);
+		}
+		
+		return result;
+	}
+	
+
+	
+	private List<Stock> findQuotes(String tickers) {
+
+		List<Stock> results = new ArrayList<Stock>();
 		String content = "";
 		try {
-			URL url = new URL(YAHOO_FINANCE_URL + "s=" + ticker + "&f=" + PARAMS);
+			URL url = new URL(YAHOO_FINANCE_URL + "s=" + tickers + "&f=" + PARAMS);
 			InputStreamReader in = new InputStreamReader(url.openStream());
 			int c;
 			while ((c = in.read()) > 0) {
@@ -55,31 +82,13 @@ public class StockService {
 			stock.price = new Float(values[3]);
 			stock.dividendYield = values[4].equals(NA) ? 0.0f : new Float(values[4]);
 			stock.pe = new Float(values[5]);
-			return stock;
+			results.add(stock);
 
 		}
 
-		stock.ticker = "Ticker " + ticker + " not found";
-
-		return stock;
-	}
-	
-	
-	public List<Stock> quotes(@Param(name = "ticker1") String ticker1,@Param(name = "ticker2") String ticker2) {
-
-	    List results = new ArrayList<Stock>();
-
-	    results.add(quote(ticker1));
-	    results.add(quote(ticker2));
+		//stock.ticker = "Ticker " + ticker + " not found";
 
 		return results;
-	}
-	
-	
-	public List<Stock> test(@Param(name = "tickers") List<Stock> tickers) {
-	
-		return tickers;
-		
 	}
 	
 	
