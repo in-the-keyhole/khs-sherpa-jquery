@@ -25,7 +25,7 @@ To build it clone then use Maven:
 	$ mvn clean package
 	
 	Deploy war to app server, start and access with...
-	http://localhost:8080/khs-sherpa-jquery/stocks-mobile.html
+	http://localhost:8080/khs-sherpa-jquery/stocks-phone.html
 
 Sherpa JQuery
 -------------
