@@ -3,7 +3,6 @@
 	$.sherpa = {
 		defaults: {url:'sherpa', dataType:'json', endpoint:null, method:null, token:null, user:null},
 		authenticate: function(user, password, callback) {
-			
 			$.sherpa.call({method:'authenticate', params: {userid:user, password:password}}, function(data) {
 				$.sherpa.defaults.token = data.token;
 				$.sherpa.defaults.user = data.userid;
@@ -12,11 +11,16 @@
 				}
 			});
 		},
-		sessions: function(callback) {
-			$.sherpa.call({method:'sessions'}, callback);
-		},
-		deactivateUser: function(user, callback) {
-			$sherpa.call({method:deactivateUser, params: {userid:user}}, callback);
+		token: {
+			validate: function(callback) {
+				// get token info from server
+			},
+			refresh: function(callback) {
+				// get new token from server
+			},
+			invalidate: function(callback) {
+				// logout or invalidate token
+			}
 		},
 		call: function(args, callback) {
 			var options = $.extend({}, $.sherpa.defaults, args);
@@ -25,7 +29,7 @@
 				  url: options.url,
 				  dataType: options.dataType,
 				  data: params,
-				  headers: (options.token === undefined || options.token === null) ? {}:{token:options.token, user:options.user},
+				  headers: (options.token === undefined || options.token === null) ? {}:{token:options.token, userid:options.user},
 				  success: function(data) {
 					  if(jQuery.isFunction(callback)) {
 						  callback(data);
