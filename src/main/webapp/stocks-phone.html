@@ -8,35 +8,72 @@
 	<script type="text/javascript" src="javascript/0.0.1/sherpa.js"></script>
 	<script>
 		
+	var allStocks;
+	var selectedStock;
 	
-    <!-- call Sherpa Endpoint 
+    <!-- call Sherpa get Quotes Endpoint 
 	$( document ).delegate("#main", "pageinit", function() {
 		$.sherpa.call({endpoint:'StockService', method:'quotes'}, listStocks);
+		
+		// Refresh button clicked
+	 	$('#refresh').bind('click',function() {
+	 		$('#stocklist').empty();
+	 		$.sherpa.call({endpoint:'StockService', method:'quotes'}, listStocks);
+	 	});
+	 	
+		// Refresh button clicked
+	 	$('#delete').click(function() {
+	 		$('#'+selectedStock.ticker).remove();
+	 		$('ul').listview('refresh');
+	 	});
+	 		
+		
 	});
+    
+    <!-- call Sherpa get a Quote Endpoint 
+	$( '#detail' ).live("pageshow", function() {
+		
+		var f = $('#detailForm');
+		f.empty();
+		f.append('<h1>'+selectedStock.ticker+'</h1>');
+		f.append('</p>');
+		f.append('<label>'+selectedStock.name+'</label>');
+		f.append('</p>')
+		f.append('<label>Price:</label>&nbsp;'+'<label><b>$'+selectedStock.price+'</b></label>');
+		f.append('</p>')
+		f.append('<label>PE:</label>&nbsp;'+'<label><b>'+selectedStock.pe+'</b></label>');
+		f.append('</p>')
+		f.append('<label>Dividend Yield:</label>&nbsp;'+'<label><b>'+selectedStock.dividendYield+'</b></label>');
+		f.append('</p>')
+		f.append('<label>Trade Date:</label>&nbsp;'+'<label><b>'+selectedStock.tradeDate+'</b></label>');
 
+	});
+    
+    <!-- sets selected stock -->
+    function selected(index) {
+    	selectedStock = allStocks[index];   	
+    }
+    
 		function listStocks(stocks) {	
+			allStocks = stocks;
 			for(var i=0, len=stocks.length; i < len; i++){	 	
 			 	$('ul').append($('<li/>', {    //here appendin `<li>`
 			 	    'data-role': "list-divider"
 			 	}).append($('<a/>', {    //here appending `<a>` into `<li>`
-			 	    'href': '#',
+			 	    'href': '#detail',
+			 	    'id' : stocks[i].ticker,
 			 	    'data-transition': 'slide',
-			 	    'text': stocks[i].ticker+' - '+stocks[i].name + '(price='+stocks[i].price+',pe='+stocks[i].pe+',date='+stocks[i].tradeDate+')'
+			 	    'text': stocks[i].ticker,
+			 	    'onClick' : 'selected('+i+');'
+	
 			 	})));
 
 			 	$('ul').listview('refresh');	
 			 	
 			}	
 			
-		 	// Refresh button clicked
-		 	$('#refresh').click(function() {
-		 		$('li').removeData();
-		 		$.sherpa.call({endpoint:'StockService', method:'quotes'}, listStocks);
-		 	});
-		 	
-		 	
-			
-			
+		 
+				
 		}	
 		
 	 $.get('data.html',function(data){
@@ -61,9 +98,9 @@
 
 	<div data-role="content">	
 		
-			<ul data-role="listview" data-inset="true" data-filter="true">
+			<ul id="stocklist" data-role="listview" data-inset="true" data-filter="false">
 			
-</ul>
+		</ul>
 		
 				
 	</div><!-- /content -->
@@ -71,14 +108,33 @@
 
 	<div data-role="footer" class="ui-bar">
 	<a href="index.html" data-role="button" data-icon="plus">Add</a>
-	<a href="index.html" data-role="button" data-icon="delete">Delete</a>
-	<a id="refresh" href="index.html" data-role="button" data-icon="refresh">Refresh</a>
+	<a id="delete" href="" data-role="button" data-icon="delete">Delete</a>
+	<a id="refresh" href="" data-role="button" data-icon="refresh">Refresh</a>
 	</div>
 	
-</div> 
-	
-
 </div><!-- /page -->
+
+
+<div id="detail" data-role="page">
+
+	<div data-role="header">
+		<h1>Stock Details</h1>
+		<a href="#main" data-role="button" data-icon="arrow-l" data-theme="d">Back</a>
+	</div><!-- /header -->
+
+	<div data-role="content">	
+		<div id="detailForm">
+		
+		</div>
+	
+				
+	</div><!-- /content -->
+				
+	
+</div><!-- /page -->
+
+
+
 
 </body>
 </html>
