@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.khs.sherpa.annotation.Endpoint;
+import com.khs.sherpa.annotation.Param;
 
 @Endpoint(authenticated = false)
 public class StockService {
@@ -29,12 +30,12 @@ public class StockService {
 		return findQuotes(TICKERS);
 	}
 	
-	public List<Stock> refresh(String tickers){
+	public List<Stock> refresh(@Param(name="tickers") String tickers){
 		return findQuotes(tickers);
 	}
 
 	
-	public Stock quote(String ticker) {
+	public Stock quote(@Param(name="ticker") String ticker) {
 		
 		List<Stock> stocks = findQuotes(ticker);
 		Stock result = null;

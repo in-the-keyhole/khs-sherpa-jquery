@@ -7,7 +7,7 @@
 	<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
 	<script type="text/javascript" src="javascript/0.0.1/sherpa.js"></script>
 	<script>
-		
+
 	var allStocks;
 	var selectedStock;
 	
@@ -22,17 +22,34 @@
 	 	});
 	 	
 		// Refresh button clicked
-	 	$('#delete').click(function() {
+	 	$('#delete').click(function() {		
 	 		$('#'+selectedStock.ticker).remove();
 	 		$('ul').listview('refresh');
 	 	});
-	 		
 		
+		// Add Stock button clicked
+	 	$('#ok').bind('click',function() { 	
+	 		var ticker = $("#ticker").val();
+	 		$.sherpa.call({endpoint:'StockService', method:'quote', params: {ticker: ticker}}, addStock);	
+		});
+	 		
 	});
     
-    <!-- call Sherpa get a Quote Endpoint 
+    
+    function addStock(stock) {
+    	if (stock.ticker) {
+	    	allStocks.push(stock);
+	    	appendStockToList(stock);
+	    	$('ul').listview('refresh');
+    	} else {
+    		alert('ticker not found');
+    	}
+    } 
+    
+   
 	$( '#detail' ).live("pageshow", function() {
 		
+		// show stock detail information
 		var f = $('#detailForm');
 		f.empty();
 		f.append('<h1>'+selectedStock.ticker+'</h1>');
@@ -47,6 +64,10 @@
 		f.append('</p>')
 		f.append('<label>Trade Date:</label>&nbsp;'+'<label><b>'+selectedStock.tradeDate+'</b></label>');
 
+		// make delete button inline	
+		$('#delete').buttonMarkup({ inline: "true" });
+		
+	
 	});
     
     <!-- sets selected stock -->
@@ -54,7 +75,21 @@
     	selectedStock = allStocks[index];   	
     }
     
-		function listStocks(stocks) {	
+    // add stock to list
+    function appendStockToList(stock) {
+		$('ul').append($('<li/>', {    //here appendin `<li>`
+ 	    'data-role': "list-divider"
+ 			}).append($('<a/>', {    //here appending `<a>` into `<li>`
+ 	    		'href': '#detail',
+ 	    		'id' : stock.ticker,
+ 	    		'data-transition': 'slide',
+ 	    		'text': stock.ticker,
+ 	    		'onClick' : 'selected('+(allStocks.length-1)+');'
+ 		})));
+	}
+    
+	// List all stocks
+    function listStocks(stocks) {	
 			allStocks = stocks;
 			for(var i=0, len=stocks.length; i < len; i++){	 	
 			 	$('ul').append($('<li/>', {    //here appendin `<li>`
@@ -70,26 +105,17 @@
 
 			 	$('ul').listview('refresh');	
 			 	
-			}	
-			
-		 
-				
+			}		
 		}	
-		
-	 $.get('data.html',function(data){
-				$('#something').append(data).trigger('create');
-				},'html');
-  
-		
+			
 	</script>
-
 	<script src="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.js"></script>
 	
-
-
 </head> 
 <body> 
 
+
+<!--  MAIN PAGE  -->
 <div id="main" data-role="page">
 
 	<div data-role="header">
@@ -97,43 +123,56 @@
 	</div><!-- /header -->
 
 	<div data-role="content">	
-		
-			<ul id="stocklist" data-role="listview" data-inset="true" data-filter="false">
-			
+			<ul id="stocklist" data-role="listview" data-inset="true" data-filter="false">		
 		</ul>
-		
-				
+					
 	</div><!-- /content -->
-				
-
+	
 	<div data-role="footer" class="ui-bar">
-	<a href="index.html" data-role="button" data-icon="plus">Add</a>
-	<a id="delete" href="" data-role="button" data-icon="delete">Delete</a>
-	<a id="refresh" href="" data-role="button" data-icon="refresh">Refresh</a>
-	</div>
+	<a href="#dlg" data-role="button" data-rel="dialog" data-theme="b" data-icon="plus">Add</a>
+	<a href="" id="refresh" data-role="button" data-theme="b" data-icon="refresh">Refresh</a>
+	</div> <!-- /footer -->
 	
 </div><!-- /page -->
 
-
+<!--  DETAIL PAGE  -->
 <div id="detail" data-role="page">
 
 	<div data-role="header">
 		<h1>Stock Details</h1>
-		<a href="#main" data-role="button" data-icon="arrow-l" data-theme="d">Back</a>
+		<a href="#main" data-role="button" data-theme="d" data-icon="arrow-l" >Back</a>
+		
 	</div><!-- /header -->
 
 	<div data-role="content">	
 		<div id="detailForm">
 		
 		</div>
-	
+	<a id="delete" href="#main" data-role="button" data-icon="delete">Remove</a>
 				
 	</div><!-- /content -->
-				
-	
+					
 </div><!-- /page -->
 
+<!--  DIALOG PAGE  -->
+<div id="dlg" data-role="page">
 
+	<div data-role="header">
+		<h1>Add Stock</h1>
+	</div><!-- /header -->
+
+	<div data-role="content">	
+		
+		<label for="basic">Ticker:</label>
+		<input type="text" name="ticker" id="ticker" data-mini="true" />
+		
+	</div><!-- /content -->
+	<div data-role="footer" class="ui-bar">
+	<a id="cancel" href="#main" data-role="button" data-rel="dialog" >Cancel</a>
+	<a id="ok" href="#main" data-role="button">Ok</a>
+	</div>
+	
+</div><!-- /page -->
 
 
 </body>
