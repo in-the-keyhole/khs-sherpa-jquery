@@ -22,6 +22,14 @@
 				// logout or invalidate token
 			}
 		},
+		commands: {
+			endpoints: function(callback) {
+				$.sherpa.call({endpoint:'Sherpa', method:'endpoints'}, callback);
+			},
+			describe: function(endpoint, callback) {
+				$.sherpa.call({endpoint:'Sherpa', method:describe, params:{value:endpoint}}, callback);
+			}
+		},
 		call: function(args, callback) {
 			var options = $.extend({}, $.sherpa.defaults, args);
 			var params = $.extend({},{endpoint: options.endpoint, action: options.method}, options.params);
