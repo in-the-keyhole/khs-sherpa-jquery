@@ -101,7 +101,7 @@
 			 	    'text': stocks[i].ticker,
 			 	    'onClick' : 'selected('+i+');'
 	
-			 	})));
+			 	}).append($('<p>')).append($('<label/>',{'text':'Price: '+stocks[i].price}))));
 
 			 	$('ul').listview('refresh');	
 			 	
@@ -118,8 +118,8 @@
 <!--  MAIN PAGE  -->
 <div id="main" data-role="page">
 
-	<div data-role="header">
-		<h1>Sherpa Stock Quotes</h1>
+	<div data-role="header" data-position="fixed">
+		<h1>Keyhole Software Sherpa Stock Quotes</h1>
 	</div><!-- /header -->
 
 	<div data-role="content">	
@@ -128,7 +128,7 @@
 					
 	</div><!-- /content -->
 	
-	<div data-role="footer" class="ui-bar">
+	<div data-role="footer"   data-position="fixed">
 	<a href="#dlg" data-role="button" data-rel="dialog" data-theme="b" data-icon="plus">Add</a>
 	<a href="" id="refresh" data-role="button" data-theme="b" data-icon="refresh">Refresh</a>
 	<a href="#about" id="about" data-role="button" data-theme="b" data-icon="info">About</a>
@@ -194,6 +194,8 @@
 		 <label>Check it out at...&nbsp;</label>
 		 <a href="https://github.com/in-the-keyhole/khs-sherpa">khsSherpa GitHub Project</a>
 		 <p>
+		 <label>This demo application can be found at...</label>
+		  <a href="https://github.com/in-the-keyhole/khs-sherpa-jquery">JQuery Mobile Demo GitHub Project</a>
 		 
 		
 	</div><!-- /content -->

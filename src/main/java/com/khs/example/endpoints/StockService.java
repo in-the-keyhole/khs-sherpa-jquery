@@ -13,7 +13,7 @@ public class StockService {
 
 	private final String YAHOO_FINANCE_URL = "http://finance.yahoo.com/d/quotes.csv?";
 	private final String PARAMS = "snd1l1yrj1";
-	private final String TICKERS = "XOM+FB+JNJ+MSFT+GOOG+GE+INTC+AAPL+ORCL+VMW+CSCO";
+	private final String TICKERS = "FB+MSFT+GOOG+GE+INTC+AAPL+ORCL+VMW+CSCO";
 	private final static String NA = "N/A";
 
 	static class Stock {
@@ -23,6 +23,8 @@ public class StockService {
 		public float price;
 		public float dividendYield;
 		public float pe;
+		public float ebitda;
+	
 	}
 
 	
