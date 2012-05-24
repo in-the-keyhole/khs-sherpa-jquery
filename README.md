@@ -27,12 +27,20 @@ To build it clone then use Maven:
 	Deploy war to app server, start and access with...
 	http://localhost:8080/khs-sherpa-jquery/stocks-phone.html
 
-Sherpa JQuery
--------------
+JQuery Mobile Demo Application
+-------------------------------
+This example JQuery Mobile application calls a StockService endpoint that return stock pricing information from the
+server for display using and HTML 5 user interface. 
 
+It demonstrates the use of the sherpa.js library that provides an easy to use api for accessing server side 
+java end point and processing the resulting JSON objects. 
 
+The java script example shown below shows how the Sherpa StockService will return JSON stock objects. Call back method
+is provided to process resulting JSON objects. 
 
+	$.sherpa.call({endpoint:'StockService', method:'quotes'}, listStocks);
 
+To use, just reference the sherpa.js java script file located in this projects src/webapp/javascript/0.0.1 folder
  
  
  
