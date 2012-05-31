@@ -1,0 +1,193 @@
+<!DOCTYPE html> 
+<html> 
+	<head> 
+	<title>My Page</title> 
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no;" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta charset="utf-8">
+            
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.css" />
+	
+	<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.js"></script>
+	<script type="text/javascript" src="javascript/jquery.tmpl.min.js"></script>
+	<script type="text/javascript" src="javascript/0.0.1/sherpa.js"></script>
+	
+	<script type="text/javascript">
+        //$.sherpa.defaults.url = 'http://sherpa.keyholekc.com/sherpa';
+		$.sherpa.defaults.before = function(jqXHR, settings) {
+			$.mobile.showPageLoadingMsg();
+		}
+		$.sherpa.defaults.always = function(data) {
+			$.mobile.hidePageLoadingMsg();
+		}
+        
+       	$.mobile.defaultPageTransition = 'none';
+        
+		$(function() {          
+          
+			$("#add").live('click', function() {
+				$.mobile.changePage($("#dlg"));
+				$('#ticker').val("").focus();
+			})
+			
+			$("#refresh").live('click', function() {
+				$.sherpa.call({endpoint:'StockService', method:'quotes'}, $.stocks.list.set);
+			});
+			
+			$("#stock_list li").live('click', function(event) {
+                $("#stock_detail").html('');
+                                     
+                var callbacks = {
+					before:function() {
+						$("#stock_detail").html('');
+						$.mobile.changePage($("#detail"));
+						$.mobile.showPageLoadingMsg();
+					},
+					done:$.stocks.details
+				};
+				
+				$.sherpa.call({endpoint:'StockService', method:'quote', params: {ticker: $(this).attr('data-ticker')}}, callbacks);
+			});
+			
+			$("#stock_list li").live('taphold', function(event) {
+				event.preventDefault();
+				alert('taphold');
+			});
+			
+			$('#ok').live('click', function() {
+				if($('#ticker').val().length > 0) {
+					if($('#stock_list li[data-ticker="'+$('#ticker').val().toUpperCase()+'"]').length === 0) {
+						$.sherpa.call({endpoint:'StockService', method:'quote', async:false, params: {ticker: $('#ticker').val()}}, $.stocks.list.add);
+					}
+				}
+			});
+          $("#detail").bind('swiperight', function() {
+               $.mobile.changePage($("#main"));
+          });
+			
+          //document.addEventListener("deviceready", onDeviceReady, false);
+          
+			$("#refresh").click();
+		});
+		
+		$.stocks = {
+			details: function(data) {
+				$("#stock_detail").html('');
+				$("#stockDetail").tmpl(data).appendTo($("#stock_detail"));
+			},
+			list: {
+				set: function(data) {
+					$("#stock_list li").remove()
+					$("#stockElement").tmpl(data).appendTo($("#stock_list"));
+					try {
+						$("#stock_list").listview('refresh');
+					} catch (e) {
+						$("#stock_list").listview();
+					}
+				}, 
+				add: function(data) {
+					$("#stockElement").tmpl(data).appendTo($("#stock_list"));
+					$("#stock_list").listview('refresh');
+				}
+			}
+		}
+	</script>
+	
+	<script id="stockElement" type="text/x-jquery-tmpl">
+		<li data-ticker="${ticker}">
+			<a href="#detail" >
+				${name} <br/> Price: $${price} 
+	 			<div style="background-image: url('images/down_r.gif');height:14px;width:11px;display:block"></div>
+			</a>
+		</li>
+	</script>
+	
+	<span style="background-image: url('images/down_r.gif');"></span>
+	<script id="stockDetail" type="text/x-jquery-tmpl">
+		<h3>${name} (${ticker})</h3>
+		Price: ${price} 
+	</script>
+</head> 
+<body> 
+
+	<div id="main" data-role="page">
+	
+		<div data-role="header">
+			<h1>Sherpa Stocks</h1>
+		</div><!-- /header -->
+	
+		<div data-role="content">	
+			<ul id="stock_list" data-role="stock_list" data-inset="true" data-filter="false">
+				
+			</ul>	
+		</div><!-- /content -->
+		<div data-role="footer"   data-position="fixed">
+			<a id="add" data-role="button" data-theme="b" data-icon="plus">Add</a>
+			<a href="" id="refresh" data-role="button" data-theme="b" data-icon="refresh">Refresh</a>
+			<a href="#about" id="about" data-role="button" data-theme="b" data-icon="info">About</a>
+			</div> <!-- /footer -->
+	</div><!-- /page -->
+
+	<div id="detail" data-role="page">
+	
+		<div data-role="header">
+			<a href="#main" data-role="button" data-theme="d" data-icon="arrow-l" >Back</a>
+			<h1>Sherpa Stocks - Detail</h1>
+		</div><!-- /header -->
+	
+		<div id="stock_detail" data-role="content">	
+		</div><!-- /content -->
+	
+	</div><!-- /page -->
+
+	<!--  ABOUT PAGE  -->
+	<div id="about" data-role="page">
+
+		<div data-role="header">
+			<h1>Keyhole Software</h1>
+			<a href="#main" data-role="button" data-theme="d" data-icon="arrow-l" >Back</a>
+		</div><!-- /header -->
+	
+		<div data-role="content">	
+			
+			 <H1>JQuery Mobile Demo Application</H1>
+			 <p>
+			  <label>Build by <a href="http://www.keyholesoftware.com" target="_blank">Keyhole Software</a></label>
+			 <p>
+			 <label>Uses <b>khsSherpa</b> open source Java/JSON Remote Endpoint Framework</label>
+			 <p>
+			 <label>Check it out at...&nbsp;</label>
+			 <a href="https://github.com/in-the-keyhole/khs-sherpa" target="_blank">khsSherpa GitHub Project</a>
+			 <p>
+			 <label>This demo application can be found at...</label>
+			  <a href="https://github.com/in-the-keyhole/khs-sherpa-jquery" target="_blank">JQuery Mobile Demo GitHub Project</a>
+			 
+			
+		</div><!-- /content -->
+	</div><!-- /page -->
+
+	<!--  DIALOG PAGE  -->
+	<div id="dlg" data-role="page">
+	
+		<div data-role="header">
+			<h1>Add Stock</h1>
+		</div><!-- /header -->
+	
+		<div data-role="content">	
+			
+			<label for="basic">Ticker:</label>
+			<input type="text" name="ticker" id="ticker" data-mini="true" />
+			
+		</div><!-- /content -->
+		<div data-role="footer" class="ui-bar">
+		<a id="cancel" href="#main" data-role="button">Cancel</a>
+		<a id="ok" href="#main" data-role="button">Ok</a>
+		</div>
+		
+	</div><!-- /page -->
+	
+</body>
+</html>

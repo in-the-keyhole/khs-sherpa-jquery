@@ -3,8 +3,11 @@ package com.khs.example.endpoints;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.google.gson.Gson;
 import com.khs.sherpa.annotation.Endpoint;
 import com.khs.sherpa.annotation.Param;
 
@@ -55,6 +58,29 @@ public class StockService {
 	
 	private List<Stock> findQuotes(String tickers) {
 
+		
+//		String content = "";
+//		try {
+//			URL url = new URL("http://finance.yahoo.com/webservice/v1/symbols/"+tickers+"/quote?view=basic&format=json");
+//			
+////			URL url = new URL(YAHOO_FINANCE_URL + "s=" + tickers + "&f=" + PARAMS);
+//			InputStreamReader in = new InputStreamReader(url.openStream());
+//			int c;
+//			while ((c = in.read()) > 0) {
+//				content = content + (char) c;
+//			}
+//
+//		} catch (Exception e) {
+//			throw new RuntimeException(e);
+//		}
+//		
+//		Gson gson = new Gson();
+//		HashMap<String, Object> map = gson.fromJson(content, HashMap.class);
+//		
+//		System.out.println(map.get("count"));
+//		
+//		return null;
+		
 		List<Stock> results = new ArrayList<Stock>();
 		String content = "";
 		try {

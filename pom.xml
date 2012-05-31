@@ -17,7 +17,7 @@
    <dependency>
     <artifactId>khs-sherpa</artifactId>
     <groupId>com.keyholesoftware</groupId>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
   </dependency>
   </dependencies>
   

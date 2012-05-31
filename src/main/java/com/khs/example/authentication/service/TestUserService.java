@@ -16,28 +16,14 @@ import com.khs.sherpa.json.service.UserService;
 
 public class TestUserService implements UserService {
 
-	public void authenticate(String userid, String password)
+	public String[] authenticate(String userid, String password)
 			throws AuthenticationException {
 		// only valid userid password
 		if ("dpitt".equals(userid) && "password".equals(password)) {
-			return;
+			return new String[] {"ROLE_ADIN"};
 		}
 		
 		throw new AuthenticationException();
 		
 	}
-
-	public void adminAuthenticate(String userid, String password)
-			throws AuthenticationException {
-		
-		
-		// only valid admin userid password
-		if ("dpitt".equals(userid) && "password".equals(password)) {
-			return;
-		}
-		
-		throw new AuthenticationException();
-		
-	}
-
 }
